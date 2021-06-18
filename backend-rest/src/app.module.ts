@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { StoreModule } from './store/store.module';
+import { CategoryModule } from './category/category.module';
+import { MenuModule } from './menu/menu.module';
 @Module({
     imports: [
         SequelizeModule.forRoot({
@@ -15,7 +17,9 @@ import { StoreModule } from './store/store.module';
         autoLoadModels: true,
         synchronize: true,
         }),
-        StoreModule
+        StoreModule,
+        CategoryModule,
+        MenuModule
     ],
     controllers: [AppController],
     providers: [AppService],
