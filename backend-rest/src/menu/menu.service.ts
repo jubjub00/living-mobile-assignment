@@ -17,4 +17,22 @@ export class MenuService {
   findAll() {
       return this.menuRepo.findAll();
   }
+
+  findOne(name: string): Promise<MenuModel> {
+    return this.menuRepo.findOne({
+      where: {name:name}
+    });
+  }
+
+  update(id: string, updateUserInput: CreateMenuDto) {
+    return this.menuRepo.update(updateUserInput,{
+        where: {id:id}
+      });
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.menuRepo.destroy({
+        where: {id:id}
+      });
+  }
 }
