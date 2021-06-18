@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/createCategory.dto';
 import { ApiOperation } from '@nestjs/swagger';
@@ -17,5 +17,23 @@ export class CategoryController {
     @ApiOperation({ summary: 'Find all category' })
     findAll() {
         return this.categoryService.findAll();
+    }
+
+    @Get(':name')
+    @ApiOperation({ summary: 'Search category' })
+    findOne(@Param('name') name: string) {
+        return this.categoryService.findOne(name);
+    }
+
+    @Delete(':id')
+    @ApiOperation({ summary: 'Delete category' })
+    remove(@Param('id') id: string) {
+        return this.categoryService.remove(id);
+    }
+
+    @Put(':id')
+    @ApiOperation({ summary: 'Update category' })
+    update(@Param('id') id: string, @Body() updateStoreDto: CreateCategoryDto) {
+        return this.categoryService.update(id, updateStoreDto);
     }
 }
