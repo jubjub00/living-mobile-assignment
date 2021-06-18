@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Param, Delete, Put } from '@nestjs/common'
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/createStore.dto';
 import { ApiOperation } from '@nestjs/swagger';
-import { StoreModel } from './store.model';
 
 @Controller('store')
 export class StoreController {
