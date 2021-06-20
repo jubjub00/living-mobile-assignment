@@ -1,15 +1,26 @@
-import { Body, Controller, Get, Post, Param, Delete, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Delete, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/createStore.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { StoreDto } from './dto/store.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('store')
 export class StoreController {
     constructor(private readonly storeService: StoreService) {}
 
+    
     @Post()
     @ApiOperation({ summary: 'Create store' })
-    create(@Body() createStoreDto: CreateStoreDto) {
+    @ApiBadRequestResponse({
+        description: 'The create-user input is invalid.',
+    })
+    @ApiCreatedResponse({ 
+        description: 'The user has been successfully created.',
+        type: StoreDto,
+    })
+    @UsePipes(new ValidationPipe())
+    async create(@Body() createStoreDto: StoreDto) {
         return this.storeService.create(createStoreDto);
     }
 
@@ -33,7 +44,15 @@ export class StoreController {
 
     @Put(':id')
     @ApiOperation({ summary: 'Update store' })
-    update(@Param('id') id: string, @Body() updateStoreDto: CreateStoreDto) {
+    @ApiBadRequestResponse({
+        description: 'The update-store input is invalid.',
+    })
+    @ApiCreatedResponse({ 
+        description: 'The store has been successfully updated.',
+        type: StoreDto,
+    })
+    @UsePipes(new ValidationPipe())
+    update(@Param('id') id: string, @Body() updateStoreDto: StoreDto) {
         return this.storeService.update(id, updateStoreDto);
     }
     

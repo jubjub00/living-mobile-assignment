@@ -1,13 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsAlpha, IsNumber, IsString, Length } from 'class-validator';
+import { IsAlpha, IsNotEmpty, IsNumber, IsString, Length } from 'class-validator';
 
-class CreateStoreDto {
+class StoreDto {
+
     @IsString()
-    @IsAlpha()
     @Length(5, 100)
     @ApiProperty()
+    @IsNotEmpty()
     name: string;
 
+    @IsString()
     @ApiProperty()
     description: string;
 
@@ -16,5 +18,5 @@ class CreateStoreDto {
     rating: number;
 }
 export {
-    CreateStoreDto,
+    StoreDto,
 }
