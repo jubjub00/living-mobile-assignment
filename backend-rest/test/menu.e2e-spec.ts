@@ -202,64 +202,111 @@ describe('MenuController (e2e)', () => {
                     .set('Content-type', 'application/json')
                     .send(createMenu)
                     .expect(201)
-                    .then((resCreateMenu) => {})
+                    .then(async (resCreateMenu) => {
+                        const updateMenu = {
+                            name: 'update menu',
+                            price: 98
+                        };
+                        await request(app.getHttpServer())
+                        .put(`/menu/${resCreateMenu.body.id}`)
+                        .set('Content-type', 'application/json')
+                        .send(updateMenu)
+                        .expect(200)
+                    })
+                })
+            })
+
+        });
+        it(`update store, then response 400 (BAD) with bad request' `, async() => {
+            const createStore = {
+                name: 'new store',
+                description: 'test',
+                rating: 99,
+            };
+            return await request(app.getHttpServer())
+            .post('/store')
+            .set('Content-type', 'application/json')
+            .send(createStore)
+            .expect(201)
+            .then(async (res)=>{
+                const createCategory = {
+                    name: 'new category',
+                    storeId: res.body.id,
+                };
+                await request(app.getHttpServer())
+                .post('/category')
+                .set('Content-type', 'application/json')
+                .send(createCategory)
+                .expect(201)
+                .then(async (resCategory) => {
+                    const createMenu = {
+                        name: 'new menu',
+                        categoryId: resCategory.body.id,
+                        price: 89
+                    };
+                    await request(app.getHttpServer())
+                    .post('/menu')
+                    .set('Content-type', 'application/json')
+                    .send(createMenu)
+                    .expect(201)
+                    .then(async (resCreateMenu) => {
+                        const updateMenu = {
+                            name: '',
+                            price: 98
+                        };
+                        await request(app.getHttpServer())
+                        .put(`/menu/${resCreateMenu.body.id}`)
+                        .set('Content-type', 'application/json')
+                        .send(updateMenu)
+                        .expect(400)
+                    })
                 })
             })
 
         });
     });
 
-    // describe('delete store', () => {
-    //     it(`delete store, then response 200 (OK) with deleted store' `, async() => {
-    //         const createStoreInput = {
-    //             name: 'new test',
-    //             description: 'test',
-    //             rating: 99,
-    //         };
-    //         await service.create(createStoreInput)
-
-    //         let id = ''
-    //         await request(app.getHttpServer())
-    //         .get('/store')
-    //         .expect(200)
-    //         .then((res)=>{
-    //             id = res.body[0].id
-    //         })
-            
-    //         await service.remove(id)
-
-    //         return request(app.getHttpServer())
-    //         .get('/store')
-    //         .expect(200)
-    //         .then((res)=>{
-    //             expect(res.body).toEqual(
-    //                 expect.objectContaining([])
-    //             )
-    //         })
-
-    //     });
-
-    //     it(`delete store, then response 200 (OK) with not delete store' `, async() => {
-    //         const createStoreInput = {
-    //             name: 'new test',
-    //             description: 'test',
-    //             rating: 99,
-    //         };
-    //         await service.create(createStoreInput)
-
-    //         let id = 'id_not_found'
-            
-    //         await service.remove(id)
-
-    //         return request(app.getHttpServer())
-    //         .get('/store')
-    //         .expect(200)
-    //         .then((res)=>{
-    //             expect(res.body[0]).toEqual(
-    //                 expect.objectContaining(createStoreInput)
-    //             )
-    //         })
-
-    //     });
-    // });
+    describe('delete store', () => {
+        it(`delete store, then response 200 (OK) with deleted store' `, async() => {
+            const createStore = {
+                name: 'new store',
+                description: 'test',
+                rating: 99,
+            };
+            return await request(app.getHttpServer())
+            .post('/store')
+            .set('Content-type', 'application/json')
+            .send(createStore)
+            .expect(201)
+            .then(async (res)=>{
+                const createCategory = {
+                    name: 'new category',
+                    storeId: res.body.id,
+                };
+                await request(app.getHttpServer())
+                .post('/category')
+                .set('Content-type', 'application/json')
+                .send(createCategory)
+                .expect(201)
+                .then(async (resCategory) => {
+                    const createMenu = {
+                        name: 'new menu',
+                        categoryId: resCategory.body.id,
+                        price: 89
+                    };
+                    await request(app.getHttpServer())
+                    .post('/menu')
+                    .set('Content-type', 'application/json')
+                    .send(createMenu)
+                    .expect(201)
+                    .then(async (resCreateMenu) => {
+                        await request(app.getHttpServer())
+                        .delete(`/menu/${resCreateMenu.body.id}`)
+                        .set('Content-type', 'application/json')
+                        .expect(200)
+                    })
+                })
+            })
+        })
+    });
 });

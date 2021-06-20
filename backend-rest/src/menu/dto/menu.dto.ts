@@ -9,7 +9,6 @@ class MenuDto {
     @IsNotEmpty()
     name: string;
 
-    @IsString()
     @ApiProperty()
     categoryId: string;
 

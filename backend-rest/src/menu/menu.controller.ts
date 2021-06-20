@@ -48,6 +48,7 @@ export class MenuController {
         description: 'The menu has been successfully updated.',
         type: MenuDto,
     })
+    @UsePipes(new ValidationPipe())
     update(@Param('id') id: string, @Body() updateStoreDto: MenuDto) {
         return this.menuService.update(id, updateStoreDto);
     }
