@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/createCategory.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { CategoryDto } from './dto/category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -9,7 +10,15 @@ export class CategoryController {
 
     @Post()
     @ApiOperation({ summary: 'Create category' })
-    create(@Body() createUserDto: CreateCategoryDto) {
+    @ApiCreatedResponse({ // HTTP 201
+        description: 'The user has been successfully created.',
+        type: CategoryDto,
+    })
+    @ApiBadRequestResponse({
+        description: 'The create-category input is invalid.',
+    })
+    @UsePipes(new ValidationPipe())
+    create(@Body() createUserDto: CategoryDto) {
         return this.categoryService.create(createUserDto);
     }
 
@@ -33,7 +42,15 @@ export class CategoryController {
 
     @Put(':id')
     @ApiOperation({ summary: 'Update category' })
-    update(@Param('id') id: string, @Body() updateStoreDto: CreateCategoryDto) {
+    @ApiCreatedResponse({ 
+        description: 'The user has been successfully created.',
+        type: CategoryDto,
+    })
+    @ApiBadRequestResponse({
+        description: 'The create-category input is invalid.',
+    })
+    @UsePipes(new ValidationPipe())
+    update(@Param('id') id: string, @Body() updateStoreDto: CategoryDto) {
         return this.categoryService.update(id, updateStoreDto);
     }
 }
